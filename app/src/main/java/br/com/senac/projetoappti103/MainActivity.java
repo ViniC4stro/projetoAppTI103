@@ -1,10 +1,13 @@
 package br.com.senac.projetoappti103;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -38,7 +41,28 @@ public class MainActivity extends AppCompatActivity {
 
         lstFilmes = findViewById(R.id.listaFilmes);
 
-        //lstFilmes.setAdapter();
+        // INSTANCIAR O ADAPTADOR
+        MyAdapter adapter = new MyAdapter();
+
+        lstFilmes.setAdapter(adapter);
+
+        lstFilmes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //ABRINDO OUTRA JANELA E PASSANDO OS VALORES
+                Intent intent = new Intent(getApplicationContext(),MostrarActivity.class);
+
+                intent.putExtra("titulo",titulo[position]);
+                intent.putExtra("ano",ano[position]);
+                intent.putExtra("classificacao",classificacao[position]);
+                intent.putExtra("notas",notas[position]);
+                intent.putExtra("imagemFilme",imgFilmes[position]);
+
+                startActivity(intent);
+            }
+        });
+
     }
 
     // CRIANDO UMA CLASSE INTERNA (INNER CLASS)
@@ -62,13 +86,27 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             //  CRIANDO AS VARIÁVEIS GLOBAIS PARA OS COMPONENTES
-            ImageView imgFilmes;
+            ImageView imageFilmes;
             TextView txtTitulo,txtAno,txtClassificacao,txtNotas;
 
             // INSTÂNCIANDO E CARREGANDO O MODELO AO ADAPTADOR
             View view = getLayoutInflater().inflate(R.layout.modelo_filmes,null);
 
-            return null;
+            // DECLARANDO O XML PARA O JAVA
+            txtTitulo = view.findViewById(R.id.txtModeloTitulo);
+            txtAno = view.findViewById(R.id.txtModeloAno);
+            txtClassificacao = view.findViewById(R.id.txtModeloClassificacao);
+            txtNotas = view.findViewById(R.id.txtModeloNotas);
+            imageFilmes = view.findViewById(R.id.imgModeloFilme);
+
+            // PASSANDO OS VALORES PARA OS COMPONENTES DO MODELO
+            txtTitulo.setText(titulo[position]);
+            txtAno.setText(ano[position]);
+            txtClassificacao.setText(classificacao[position]);
+            txtNotas.setText(notas[position]);
+            imageFilmes.setImageResource(imgFilmes[position]);
+
+            return view;
         }
     }
 }
